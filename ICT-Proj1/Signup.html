@@ -11,7 +11,86 @@
    background-repeat:no-repeat;/*we want to have one single image not a repeated one*/  
    background-size:cover;/*this sets the image to fullscreen covering the whole screen*/  
    }
+        .errorClass{
+            color:red;
+            
+        }
     </style>
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript">
+       $(document).ready(function () {
+
+    $('.errorClass').hide();
+
+    $('#privacy-checkbox').on('click', function (e) {
+        $(this).toggleClass('checked');
+    });
+
+    $('#submitButton').click(function (e) {
+        e.preventDefault();
+         ValidatePhoneNumber($(".signup input[type='tel']"));
+        ValidateEmail($(".signup input[type='email']"));
+        validateText($("#firstName"));
+        validateText($("#lastName"));
+        validateText($("#password"));
+        validaterePassword($('#rePassword'));
+        var $name = $('#privacy-checkbox');
+        if (!$name.hasClass("checked")) {
+            alert("Please read our policy and check agree");
+        }
+    });
+});
+
+
+function addError(inputControl) {
+    var elem = inputControl.parent();
+    elem.find('span').css("display", "block");
+}
+
+function removeError(inputControl) {
+    var elem = inputControl.parent();
+    elem.find('span').css("display", "none");
+}
+
+function ValidateEmail(inputControl) {
+    var regEx = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+     var isEmail= regEx.test(inputControl.val())
+    if(isEmail) {
+        removeError(inputControl);
+    }
+    else if(!isEmail){
+        addError(inputControl);
+    }
+}
+
+function ValidatePhoneNumber(inputControl) {
+    var regEx = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+   var isPhneNumber= regEx.test(inputControl.val())
+    if(isPhneNumber) {
+        removeError(inputControl);
+    }
+    else if(!isPhneNumber){
+        addError(inputControl);
+    }
+}
+        
+        
+        function validateText(inputcontrol){
+            if(inputcontrol.val().length>0){
+                removeError(inputcontrol);
+                
+            }else if(inputcontrol.val().length<=0){
+                addError(inputcontrol);
+            }
+        }
+        
+        function validaterePassword(inputcontrol){
+            var pwd= $('#password')
+            if(pwd.val() === inputcontrol.val()){removeError(inputcontrol);}
+            else if(pwd.val() !== inputcontrol.val()){addError(inputcontrol);}
+        }
+    </script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" href="main.css">
 </head>
@@ -35,21 +114,36 @@
         <div class="col-xs-6 col-md-8">
             <div class="signup">
                 <p class="signup heading">ENTER YOUR DETAILS BELOW</p>
-                
-                <table cellspacing="0" class="no-spacing" height="50" >
-                <input type="text" placeholder="First Name" />
-                <input type="text" placeholder="Last Name" />
-                <input type="email" placeholder="Email Address" />
-                <input type="tel" placeholder="Phone Number" />
-                <input type="password" placeholder="Password"/>
-                <input type="password" placeholder="Re-enter your password"/>
-                    
+                    <div class="controlGroup">
+                    <span class="errorClass">Please Enter a Valid FirstName</span>
+                <input id="firstName" type="text" placeholder="First Name" />
+                        </div>
+                 <div>
+                    <span class="errorClass">Please Enter a Valid LastName</span>
+                <input type="text" id="lastName" placeholder="Last Name" />
+                </div>
+                 <div>
+                    <span class="errorClass">Please Enter a Valid email address</span>
+                <input type="email" id="emailAddress" placeholder="Email Address" />
+                     </div>
+                 <div>
+                    <span class="errorClass">Please Enter a Valid phone number</span>
+                <input type="tel" id="phoneNumber" placeholder="Phone Number" />
+                </div>
+                 <div>
+                    <span class="errorClass">Please Enter a Valid password</span>
+                <input type="password" id="password" placeholder="Password"/>
+                </div>
+                 <div>
+                    <span class="errorClass">Please Enter a Valid password</span>
+                <input type="password" id="rePassword" placeholder="Re-enter your password"/>
+                </div>
                 <input type="checkbox" id="privacy-checkbox" /><label for="privacy-checkbox">
                     <strong>
                         I have read the
                         <a data-toggle="modal" href="#tallModal" class="privacy-policy">Terms & conditions.</a>
                         
-                <p><a href="#" class="btn btn-primary" role="button">Sign Up</a></p>
+                <p><a href="#" class="btn btn-primary" id="submitButton" role="button">Sign Up</a></p>
                 <p><a href="login.html"> Already have a Account? Log in</a></p>
             </div>
         </div>
